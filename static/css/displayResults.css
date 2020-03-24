@@ -1,0 +1,19 @@
+.displayLR{
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    background-color: red;    
+}
+
+.displaySR{
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    background-color: green;
+}
+
+
+.displayedImage{
+    margin-top: 10%;
+    margin-bottom: 10%;
+}

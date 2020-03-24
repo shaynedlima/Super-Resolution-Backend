@@ -1,0 +1,8 @@
+div#loading {
+    width: 15%;
+    height: 15%;
+    display: flex;
+    justify-content: center;
+    background: url(/static/loadingimage.gif) no-repeat;
+    cursor: wait;
+}

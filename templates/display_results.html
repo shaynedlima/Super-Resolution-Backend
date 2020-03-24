@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/displayResults.css') }}">
+{% endblock %}
+{% block title %}Results{% endblock %}
+
+{% block content %}
+
+
+<div class="d-md-flex flex-md-equal w-100">
+    <div class="displayLR">
+
+        <img class="displayedImage" src="{{ url_for('static', filename=lr_img) }}" alt="LR Image" width="75%">
+    </div>
+    <div class="displaySR">
+        <img class="displayedImage animated fadeIn delay-1s" src="{{ url_for('static', filename=sr_img) }}" alt="SR Image" width="75%">
+    </div>
+</div>
+
+{% endblock %}
