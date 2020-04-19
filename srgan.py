@@ -17,7 +17,8 @@ def forward_pass(img, results, models, filename, halve=False):
     
 
     # Load models
-    srgan_generator = torch.load(srgan_model).to(device)
+    # srgan_generator = torch.load(srgan_model).to(device)
+    srgan_generator = torch.load(srgan_model, map_location=torch.device("cpu"))
     srgan_generator.train(False)
     srgan_generator.eval()
 
