@@ -4,6 +4,7 @@ from flask import send_file, request, redirect, render_template, url_for
 import os
 from werkzeug.utils import secure_filename
 from utils import *
+from PIL import Image
 
 app = flask.Flask(__name__)
 app = app_configs(app)
@@ -19,12 +20,14 @@ def upload_image():
     if request.method == "POST":
         if request.files:
             if "filesize" in request.cookies:
-                # if not allowed_image_filesize(request.cookies["filesize"], app):
-                #     print("Filesize exceeded maximum limit")
-                #     return redirect(request.url)
+                # Deleting contents from the temp results folder
+                results_path = app.config["IMAGE_RESULTS"]
+                filelist = [ f for f in os.listdir(results_path)]
+                for f in filelist:
+                    os.remove(os.path.join(results_path, f))
 
                 image = request.files["image"]
-
+                
                 if image.filename == "":
                     print("No filename")
                     return redirect(request.url)
@@ -32,12 +35,11 @@ def upload_image():
                 if allowed_image(image.filename, app):
                     filename = secure_filename(image.filename)
                     file_path = os.path.join(app.config["IMAGE_UPLOADS"], filename)
-                    results_path = app.config["IMAGE_RESULTS"]
+                    # results_path = app.config["IMAGE_RESULTS"]
                     models_path = app.config["MODELS"]
-                    image.save(file_path)
-                    print("Image saved")
-                    print(file_path)
-                    image = srgan.forward_pass(img=file_path, results = results_path, models = models_path, filename=filename)
+                    # image.save(file_path)
+                    image = Image.open(image, mode="r")
+                    srgan.forward_pass(img=image, results = results_path, models = models_path, filename=filename)
                     # filename = json.dumps({"filename":filename})
                     print('DONE')
                 else:
@@ -53,14 +55,19 @@ def display_results():
         filename = request.args['filename']
         lr_result = f"lr_{filename}"
         sr_result = f"sr_{filename}"
-        print(lr_result)
         return render_template("display_results.html", lr_img = lr_result, sr_img = sr_result)
     else:
         print('Show past results')
-        return render_template("past_results.html")
+        past_results_path = app.config["IMAGE_RESULTS"] + '\past_results'
+        files = sorted(os.listdir(past_results_path))
+        lr_imgs = files[:int(len(files)/2)]
+        sr_imgs = files[int(len(files)/2):]
+        past_results = zip(lr_imgs, sr_imgs)
+        return render_template("past_results.html", past_results= past_results)
 
 @app.route('/past_results')
 def past_results():
     return render_template("past_results.html")
 
-app.run()
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=8080)
