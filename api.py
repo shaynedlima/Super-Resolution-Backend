@@ -22,7 +22,7 @@ def upload_image():
             if "filesize" in request.cookies:
                 # Deleting contents from the temp results folder
                 results_path = app.config["IMAGE_RESULTS"]
-                filelist = [ f for f in os.listdir(results_path)]
+                filelist = [ f for f in os.listdir(results_path) if not f.endswith(".txt")]
                 for f in filelist:
                     os.remove(os.path.join(results_path, f))
 
