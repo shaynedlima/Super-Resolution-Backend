@@ -6,5 +6,5 @@ MarkupSafe==1.1.1
 numpy==1.18.2
 Pillow==7.0.0
 six==1.14.0
-http://download.pytorch.org/whl/cpu/torch-0.4.1-cp36-cp36m-linux_x86_64.whl
+http://download.pytorch.org/whl/cpu/torch-1.0.0-cp37-cp37m-linux_x86_64.whl
 Werkzeug==1.0.0
