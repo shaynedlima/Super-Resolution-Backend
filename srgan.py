@@ -31,7 +31,7 @@ def forward_pass(img, results, models, filename, halve=False):
 
     print(hr_img)
     # Want to input an image that has max. pixel side length of 500
-    max_pixel_length = 100
+    max_pixel_length = 150
     width_scale = int(hr_img.width/max_pixel_length)
     height_scale = int(hr_img.height/max_pixel_length)
     print(width_scale)

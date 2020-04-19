@@ -70,4 +70,4 @@ def past_results():
     return render_template("past_results.html")
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080)
+    app.run(port=os.getenv('PORT', 5000))
