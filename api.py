@@ -39,7 +39,7 @@ def upload_image():
                     models_path = app.config["MODELS"]
                     # image.save(file_path)
                     image = Image.open(image, mode="r")
-                    image = scale_image(image, max_pixel_length = 150)
+                    image = scale_image(image, max_pixel_length = 100)
                     srgan.forward_pass(lr_img=image, results = results_path, models = models_path, filename=filename)
                     # filename = json.dumps({"filename":filename})
                     print('DONE')
