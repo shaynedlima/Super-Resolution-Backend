@@ -5,7 +5,7 @@ import os
 
 dirname = os.path.dirname(__file__)
 upload_path = os.path.join(dirname, 'uploaded_images')
-results_path = os.path.join(dirname, 'static')
+results_path = os.path.join(dirname, 'static/temp')
 models_path = os.path.join(dirname, 'models')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
