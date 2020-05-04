@@ -11,13 +11,20 @@ def forward_pass(lr_img, results, models, filename, halve=False):
     device = "cpu"
 
     # Saved Model
-    srgan_model = os.path.join(models, "srgan.pt")
+    srgan_model = os.path.join(models, "srgan_22epochs.pt")
     
     # Load models
     # srgan_generator = torch.load(srgan_model).to(device)
     srgan_generator = torch.load(srgan_model, map_location=torch.device("cpu"))
     srgan_generator.train(False)
     srgan_generator.eval()
+    
+
+    # # Model checkpoints
+    # srgan_checkpoint = os.path.join(models, "checkpoint_srgan_2.pth.tar")
+    # # Load models
+    # srgan_generator = torch.load(srgan_checkpoint)['generator'].to(device)
+    # srgan_generator.eval()
 
     # img = "./img/New Images/airport_lr.jpg"
 
