@@ -7,7 +7,7 @@ import tempfile
 
 dirname = os.path.dirname(__file__)
 bucket_name = "super_res_bucket"
-bucket_link = "https://storage.cloud.google.com/super_res_bucket/"
+bucket_link = "https://storage.googleapis.com/super_res_bucket/"
 models_path = os.path.join(dirname, 'models')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
