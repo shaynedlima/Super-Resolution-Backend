@@ -8,6 +8,12 @@ from PIL import Image
 app = flask.Flask(__name__)
 app = app_configs(app)
 
+# Heroku
+f = open("./google-credentials-heroku.json", "w")
+print(os.environ['GOOGLE_CONFIG'])
+f.write(os.environ['GOOGLE_CONFIG'])
+f.close()
+
 @app.route('/', methods=['GET'])
 def home():
     return render_template("home.html")
@@ -60,8 +66,4 @@ def past_results():
     return render_template("past_results.html")
 
 if __name__ == '__main__':
-    f = open("./google-credentials-heroku.json", "w")
-    print(os.environ['GOOGLE_CONFIG'])
-    f.write(os.environ['GOOGLE_CONFIG'])
-    f.close()
     app.run(port=os.getenv('PORT', 5000))
