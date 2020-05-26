@@ -4,3 +4,4 @@ __pycache__/
 static/css/past_results/
 checkpoints/
 results/
+config/
