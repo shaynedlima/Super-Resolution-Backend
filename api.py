@@ -5,7 +5,6 @@ import os
 from werkzeug.utils import secure_filename
 from utils import *
 from PIL import Image
-
 app = flask.Flask(__name__)
 app = app_configs(app)
 
