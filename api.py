@@ -8,9 +8,8 @@ from PIL import Image
 app = flask.Flask(__name__)
 app = app_configs(app)
 
-# Heroku
+# Heroku GCP Setup
 f = open("./google-credentials-heroku.json", "w")
-print(os.environ['GOOGLE_CONFIG'])
 f.write(os.environ['GOOGLE_CONFIG'])
 f.close()
 
