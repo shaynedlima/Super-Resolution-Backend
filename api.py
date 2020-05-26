@@ -61,6 +61,7 @@ def past_results():
 
 if __name__ == '__main__':
     f = open("./google-credentials-heroku.json", "w")
+    print(os.environ['GOOGLE_CONFIG'])
     f.write(os.environ['GOOGLE_CONFIG'])
     f.close
     app.run(port=os.getenv('PORT', 5000))
