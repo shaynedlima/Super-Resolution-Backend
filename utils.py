@@ -2,10 +2,12 @@ from PIL import Image
 import torch
 import torchvision.transforms.functional as FT
 import os
+from google.cloud import storage
+import tempfile
 
 dirname = os.path.dirname(__file__)
-upload_path = os.path.join(dirname, 'uploaded_images')
-results_path = os.path.join(dirname, 'static/temp')
+bucket_name = "super_res_bucket"
+bucket_link = "https://storage.cloud.google.com/super_res_bucket/"
 models_path = os.path.join(dirname, 'models')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -104,8 +106,8 @@ def scale_image(image, max_pixel_length):
 
 def app_configs(app):
     app.config["DEBUG"] = True
-    app.config["IMAGE_UPLOADS"] = upload_path
-    app.config["IMAGE_RESULTS"] = results_path
+    app.config["BUCKET_NAME"] = bucket_name
+    app.config["BUCKET_LINK"] = bucket_link
     app.config["MODELS"] = models_path
     app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG"]
     app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
@@ -118,3 +120,26 @@ def allowed_image_filesize(filesize, app):
         return True
     else:
         return False
+        
+def upload_gcp(bucket_name, source_image, destination_blob_name):
+    """Uploads a file to the bucket."""
+    # bucket_name = "your-bucket-name"
+    # source_file_name = "local/path/to/file"
+    # destination_blob_name = "storage-object-name"
+
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+
+    with tempfile.NamedTemporaryFile(suffix='.jpg') as gcs_image:
+        source_image.save(gcs_image)
+        gcs_image.seek(0)
+        blob = bucket.blob(destination_blob_name)
+        blob.upload_from_file(gcs_image)
+        
+    print(
+        "File {} uploaded to {}.".format(
+            destination_blob_name, destination_blob_name
+        )
+    )

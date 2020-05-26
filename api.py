@@ -20,12 +20,6 @@ def upload_image():
     if request.method == "POST":
         if request.files:
             if "filesize" in request.cookies:
-                # Deleting contents from the temp results folder
-                results_path = app.config["IMAGE_RESULTS"]
-                filelist = [ f for f in os.listdir(results_path) if not f.endswith(".txt")]
-                for f in filelist:
-                    os.remove(os.path.join(results_path, f))
-
                 image = request.files["image"]
                 
                 if image.filename == "":
@@ -34,13 +28,11 @@ def upload_image():
 
                 if allowed_image(image.filename, app):
                     filename = secure_filename(image.filename)
-                    file_path = os.path.join(app.config["IMAGE_UPLOADS"], filename)
-                    # results_path = app.config["IMAGE_RESULTS"]
                     models_path = app.config["MODELS"]
                     # image.save(file_path)
                     image = Image.open(image, mode="r")
                     image = scale_image(image, max_pixel_length = 100)
-                    srgan.forward_pass(lr_img=image, results = results_path, models = models_path, filename=filename)
+                    srgan.forward_pass(lr_img=image, bucket_name = app.config["BUCKET_NAME"], models = models_path, filename=filename)
                     # filename = json.dumps({"filename":filename})
                     print('DONE')
                 else:

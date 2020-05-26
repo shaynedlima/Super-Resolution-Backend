@@ -6,7 +6,7 @@ import numpy as np
 import os
 
 
-def forward_pass(lr_img, results, models, filename, halve=False):
+def forward_pass(lr_img, bucket_name, models, filename, halve=False):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     device = "cpu"
 
@@ -37,14 +37,19 @@ def forward_pass(lr_img, results, models, filename, halve=False):
     #                            Image.LANCZOS)
     # lr_img = hr_img.resize((int(hr_img.width / 4), int(hr_img.height / 4)),
     #                        Image.BILINEAR)
-
-    lr_img.save(os.path.join(results, f"lr_{filename}"))
+    
+    # Upload LR Image
+    upload_gcp(bucket_name, lr_img, f"lr_{filename}")
+    # lr_img.save(os.path.join(results, f"lr_{filename}"))
 
     # Super-resolution (SR) with SRGAN
     sr_img_srgan = srgan_generator(convert_image(lr_img, source='pil', target='imagenet-norm').unsqueeze(0).to(device))
     sr_img_srgan = sr_img_srgan.squeeze(0).cpu().detach()
     sr_img_srgan = convert_image(sr_img_srgan, source='[-1, 1]', target='pil')
-    sr_img_srgan.save(os.path.join(results, f"sr_{filename}"))
+    
+    # Upload SR Image
+    upload_gcp(bucket_name, sr_img_srgan, f"sr_{filename}")
+    #sr_img_srgan.save(os.path.join(results, f"sr_{filename}"))
 
     del srgan_generator
     del sr_img_srgan
