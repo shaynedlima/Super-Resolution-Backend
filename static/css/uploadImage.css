@@ -6,3 +6,11 @@ div#loading {
     background: url(/static/loadingimage.gif) no-repeat;
     cursor: wait;
 }
+
+.upload-label{
+    overflow: hidden;
+}
+
+.upload-button{
+    margin-top: 3em;
+}

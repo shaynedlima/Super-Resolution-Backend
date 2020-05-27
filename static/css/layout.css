@@ -5,9 +5,26 @@
 /*
  * Custom translucent site header
  */
+.body{
+  background-color: #121212;
+}
+
+.display-4{
+  color: #BB86FC;
+}
+
+.lead{
+  color: #f3f3f3;
+}
+
+.get-started{
+  color: #BB86FC;
+  border-color: #BB86FC !important;
+  border-width: 1px;
+}
 
 .site-header {
-  background-color: rgba(0, 0, 0, .85);
+  background-color: #1F1B24;
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
 }

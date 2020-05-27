@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 </head>
 
-<body>
+<body class="body">
     <nav class="site-header sticky-top py-1">
         <div class="container d-flex flex-column flex-md-row justify-content-between">
             <a class="py-2" href="{{ url_for('home') }}">
@@ -38,7 +38,7 @@
                 </svg>
             </a>
             <a class="py-2 d-none d-md-inline-block" href="{{ url_for('upload_image') }}">Upload Image</a>
-            <!-- <a class="py-2 d-none d-md-inline-block" href="{{ url_for('display_results') }}">Display Results</a> -->
+            <a class="py-2 d-none d-md-inline-block" href="{{ url_for('display_results') }}">Display Results</a>
             <a class="py-2 d-none d-md-inline-block" href="#">About Us</a>
         </div>
     </nav>
