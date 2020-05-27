@@ -52,9 +52,7 @@ def display_results():
         sr_result = f"sr_{filename}"
         return render_template("display_results.html", lr_img = lr_result, sr_img = sr_result)
     else:
-        print('Show past results')
-        past_results_path = app.config["IMAGE_RESULTS"] + '\past_results'
-        files = sorted(os.listdir(past_results_path))
+        files = sorted(list_blobs(app.config["BUCKET_NAME_PREV"]))
         lr_imgs = files[:int(len(files)/2)]
         sr_imgs = files[int(len(files)/2):]
         past_results = zip(lr_imgs, sr_imgs)

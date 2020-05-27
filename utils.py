@@ -7,7 +7,9 @@ import tempfile
 
 dirname = os.path.dirname(__file__)
 bucket_name = "super_res_bucket"
+bucket_prev_results_name = "super-res-results"
 bucket_link = "https://storage.googleapis.com/super_res_bucket/"
+bucket_results_link = "https://storage.googleapis.com/super-res-results/"
 models_path = os.path.join(dirname, 'models')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -108,6 +110,8 @@ def app_configs(app):
     app.config["DEBUG"] = True
     app.config["BUCKET_NAME"] = bucket_name
     app.config["BUCKET_LINK"] = bucket_link
+    app.config["BUCKET_NAME_PREV"] = bucket_prev_results_name
+    app.config["BUCKET_LINK_PREV"] = bucket_results_link
     app.config["MODELS"] = models_path
     app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG"]
     app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
@@ -143,3 +147,14 @@ def upload_gcp(bucket_name, source_image, destination_blob_name):
             destination_blob_name, destination_blob_name
         )
     )
+
+def list_blobs(bucket_name):
+    """Lists all the blobs in the bucket."""
+    storage_client = storage.Client()
+
+    # Note: Client.list_blobs requires at least package version 1.17.0.
+    blobs = storage_client.list_blobs(bucket_name)
+
+    blob_names = [blob.name for blob in blobs]
+    
+    return blob_names
