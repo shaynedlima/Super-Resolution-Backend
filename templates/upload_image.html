@@ -13,35 +13,66 @@
 
 {% block content %}
 
-<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+{% for message in get_flashed_messages() %}
+<div id="alert" class="alert alert-danger">{{ message }}</div>
+{% endfor %}
+
+<div id="form" class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
   <div class="col-md-5 p-lg-5 mx-auto my-5">
     <h1 class="display-4 font-weight-normal">Upload Image</h1>
     <form action="/upload_image" method="POST" enctype="multipart/form-data">
 
-      <div class="form-group" id="form">
+      <div class="form-group">
         <div class="custom-file">
-          <input type="file" class="custom-file-input" name="image" id="image" oninput="filesize(this);" accept="image/*" capture="camera">
+          <input type="file" class="custom-file-input" name="image" id="image" oninput="filesize(this);"
+            accept="image/*" capture="camera">
           <label id="upload-label" class="custom-file-label" for="image">Select image...</label>
         </div>
 
         <button type="submit" class="upload-button btn btn-primary" onClick="loading();">Upload</button>
       </div>
-      
+
     </form>
-    
+
   </div>
 </div>
 
+
+<div id="loading">
+  <div class="sk-folding-cube">
+    <div class="sk-cube1 sk-cube"></div>
+    <div class="sk-cube2 sk-cube"></div>
+    <div class="sk-cube4 sk-cube"></div>
+    <div class="sk-cube3 sk-cube"></div>
+  </div>
+  <p id="loadingSentences"></p>
+</div>
+
+
 <script>
-  function loading(){
-      $("#loading").show();
-      $("#form").hide();       
-      console.log("Show loading!")
+  function loading() {
+    $("#loading").css('visibility', 'visible');
+    $("#form").hide();
+    $("#alert").hide();
   };
 
   function filesize(elem) {
     $("#upload-label").text(elem.value);
     document.cookie = `filesize=${elem.files[0].size}`
   }
+
+  var loadingSentences = ["It will be worth the wait...", "Patience is a virtue", "Almost there!"];
+  var count = 0;
+
+  function changeSentence() {
+    if (count > loadingSentences.length - 1) {
+      count = 0;
+    }
+    document.getElementById("loadingSentences").innerHTML = loadingSentences[count];
+    count++
+  }
+
+  var inst = setInterval(changeSentence, 3000);
+
 </script>
 {% endblock %}
