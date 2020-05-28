@@ -1,6 +1,6 @@
 import flask
 import srgan
-from flask import send_file, request, redirect, render_template, url_for
+from flask import send_file, request, redirect, render_template, url_for, flash
 import os
 from werkzeug.utils import secure_filename
 from utils import *
@@ -26,6 +26,7 @@ def upload_image():
                 
                 if image.filename == "":
                     print("No filename")
+                    flash("Looks like you forgot to upload an image.")
                     return redirect(request.url)
 
                 if allowed_image(image.filename, app):
@@ -39,6 +40,7 @@ def upload_image():
                     print('DONE')
                 else:
                     print("That file extension is not allowed")
+                    flash("Make sure you upload an image.")
                     return redirect(request.url)
         return redirect(url_for('display_results', filename=filename))
                     
@@ -63,4 +65,5 @@ def past_results():
     return render_template("past_results.html")
 
 if __name__ == '__main__':
+    app.secret_key = 'many random bytes'
     app.run(port=os.getenv('PORT', 5000))
