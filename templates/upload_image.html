@@ -8,8 +8,8 @@
   }
 </style>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/uploadImage.css') }}">
 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/uploadImage.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -25,25 +25,50 @@
 
     <!-- Uploaded image area-->
     <div class="upload-area">
+      <img class="upload-icon" src="./static/icons/cloud-upload.svg" alt="upload icon">
       <img id="imageResult">
+      <canvas id="Canvas" class="video"></canvas>
     </div>
+    <!-- 
+    <button id="modifyImage">Pixelate and Remove Pixels</button> -->
+
 
     <form action="/upload_image" method="POST" enctype="multipart/form-data">
       <div class="form-group">
         <div class="custom-file">
           <div class="btn purple-button choose-file">
-            Choose File
+            Choose Image
             <input type="file" class="custom-file-input" name="image" id="image" oninput="filesize(this);"
-              onchange="readURL(this);" accept="image/*" capture="camera">
+              onchange="readURL(this); showInputs();" accept="image/*" capture="camera">
+          </div>
+          <div id="userInputs">
+            <p class="inputLabels">Pixelation Amount</p>
+            <input class="slider" id="pixelateRange" name="pixelateAmount" type="range" min="1" max="100" value="0"
+              oninput="inputChanges();">
+
+            <p class="inputLabels">Removal Amount</p>
+            <input class="slider" id="removalRange" name="removalAmount" type="range" min="0" max="100" value="0"
+              oninput="inputChanges();">
+
+
+
+            <input type="hidden" id="x_removal" name="x_removal" value="0">
+            <input type="hidden" id="y_removal" name="y_removal" value="0">
+          </div>
+
+          <div class="privacyTerms">
+            <input class="form-check-input" type="checkbox" value="" id="privacyCheck" name="privacyCheck"
+              onchange="agreeTerms();">
+            <label class="form-check-label" for="privacyCheck">
+              I agree to the <a class="terms-conditions" data-toggle="modal" data-target="#termsModal">privacy
+                policy</a>
+            </label>
+
           </div>
         </div>
 
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" onchange="agreeTerms()">
-          <label class="form-check-label" for="defaultCheck1">
-            I agree to the <a class="terms-conditions" data-toggle="modal"
-              data-target="#termsModal">privacy policy</a>
-          </label>
+
 
           <!-- Modal -->
           <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -57,9 +82,12 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <p>This application doesn't require registration in order to upload images, thus we do not collect any personally identifiable data.</p> 
-                  <p>When images are uploaded, these images will be made publicly accessible for 1 day before being deleted from our servers.</p>
-                  <p>This allows anyone who obtains the corresponding link to view the image enhancement results for the particular image.</p> 
+                  <p>No registration is required to use this application, thus we do not collect any personally
+                    identifiable data.</p>
+                  <p>When images are uploaded, these images will be made publicly accessible for 1 day before being
+                    deleted from our servers.</p>
+                  <p>This allows anyone who obtains the corresponding link to view the image enhancement results for the
+                    particular image.</p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -91,6 +119,7 @@
 </div>
 
 
+
 <script>
   function loading() {
     $("#loading").css('visibility', 'visible');
@@ -103,18 +132,25 @@
     document.cookie = `filesize=${elem.files[0].size}`
   }
 
+  function showInputs() {
+    $("#userInputs").css('display', 'block');
+    $('.privacyTerms').css('display', 'block');
+  }
+
+
   var agree = 0;
-  function agreeTerms(){
+  function agreeTerms() {
     agree = !agree;
-    if(agree){
+    if (agree) {
       $(".upload-button").css('visibility', 'visible');
-    }else{
+    } else {
       $(".upload-button").css('visibility', 'hidden');
     }
-    
+
   }
 
   function readURL(input) {
+    $(".upload-icon").hide();
     if (input.files && input.files[0]) {
       var reader = new FileReader();
 
@@ -138,6 +174,108 @@
   }
 
 
+
+
+
+  // Initialising Canvas
+  var image = document.getElementById('imageResult');
+
+  image.addEventListener("load", function () {
+    pixelate(document.getElementById('pixelateRange').value);
+  });
+
+
+
+  // Pixelation and Pixel Removal
+  var canvas = document.querySelector("canvas"), ctx = canvas.getContext("2d");
+  var rect = canvas.getBoundingClientRect();
+  var x = canvas.clientX - rect.left, y = canvas.clientY - rect.top;
+
+  function drawImage() {
+    var image = document.getElementById('imageResult');
+    canvas = document.getElementById('Canvas');
+    context = canvas.getContext('2d');
+    // Set the canvas the same width and height of the image
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  }
+
+
+  function pixelate(pixelateAmount) {
+    drawImage();
+
+    var data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+    var max_pixel_length = 100;
+
+    var pixel_length = Math.floor(max_pixel_length * (101 - pixelateAmount) * 0.01);
+
+    var width_scale = Math.floor(canvas.width / pixel_length);
+    var height_scale = Math.floor(canvas.height / pixel_length);
+
+    var scale = width_scale > height_scale ? width_scale : height_scale;
+    // If scale is too small
+    scale = scale == 0 ? 1 : scale;
+    // If scale is too large
+    scale = scale >= canvas.width ? canvas.width : scale
+    scale = scale >= canvas.height ? canvas.height : scale
+
+
+    var sample_size = scale;
+
+    // Pixelating
+    for (var y = 0; y < canvas.height; y += sample_size) {
+      for (var x = 0; x < canvas.width; x += sample_size) {
+        var p = (x + (y * canvas.width)) * 4;
+        ctx.fillStyle = "rgba(" + data[p] + "," + data[p + 1] + "," + data[p + 2] + "," + data[p + 3] + ")";
+        ctx.fillRect(x, y, sample_size, sample_size);
+      }
+    }
+  }
+
+
+  canvas.onclick = function (e) {
+    // Re-running pixelation
+    pixelate(document.getElementById('pixelateRange').value);
+
+    var removalAmount = document.getElementById('removalRange').value;
+    var shorterSide = canvas.width > canvas.height ? canvas.height : canvas.width;
+
+    // Max allowed removal is 50%
+    var removalWidth = shorterSide * removalAmount * 0.01 * 0.5;
+
+    // important: correct mouse position:
+    rect = this.getBoundingClientRect();
+    x = e.clientX - rect.left;
+    y = e.clientY - rect.top;
+
+    document.getElementById('x_removal').value = x / canvas.width;
+    document.getElementById('y_removal').value = y / canvas.height;
+
+    ctx.fillStyle = "black";
+    ctx.fillRect(x - removalWidth / 2, y - removalWidth / 2, removalWidth, removalWidth);
+  };
+
+  function inputChanges() {
+    pixelate(document.getElementById('pixelateRange').value);
+    var removalAmount = document.getElementById('removalRange').value;
+
+    var shorterSide = canvas.width > canvas.height ? canvas.height : canvas.width;
+
+    var removalWidth = shorterSide * removalAmount * 0.01 * 0.5;
+
+    if (isNaN(x) || isNaN(y)) {
+      x = 0, y = 0;
+    }
+
+    ctx.fillStyle = "black";
+    ctx.fillRect(x - removalWidth / 2, y - removalWidth / 2, removalWidth, removalWidth);
+  }
+
+
+  // Loading Screen
 
   var loadingSentences = ["It will be worth the wait...", "Patience is a virtue", "Almost there!"];
   var count = 0;

@@ -31,10 +31,30 @@ def upload_image():
 
                 if allowed_image(image.filename, app):
                     filename = secure_filename(image.filename)
+
+                    # Obtain Pixelation and Removal Amounts
+                    pixelateAmount = int(request.form['pixelateAmount'])
+                    max_pixel_length = 100
+                    pixel_length = int(float(max_pixel_length * (101 - pixelateAmount) * 0.01))
+
+                    y_removal = float(request.form['y_removal'])
+                    x_removal = float(request.form['x_removal'])
+                    removalAmount = int(request.form['removalAmount'])
+                    
                     models_path = app.config["MODELS"]
                     # image.save(file_path)
                     image = Image.open(image, mode="r")
-                    image = scale_image(image, max_pixel_length = 100)
+
+                    
+                    # Removing Section from image
+                    shorterSide = image.height if image.width > image.height else image.width
+                    removalWidth = shorterSide * removalAmount * 0.01 * 0.5
+
+                    image = remove_pixels(image, removalWidth, x_removal, y_removal) if removalWidth else image 
+                    
+                    # Pixelating Image
+                    image = scale_image(image, pixel_length)
+
                     srgan.forward_pass(lr_img=image, bucket_name = app.config["BUCKET_NAME"], models = models_path, filename=filename)
                     # filename = json.dumps({"filename":filename})
                     print('DONE')
