@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageDraw
 import torch
 import torchvision.transforms.functional as FT
 import os
@@ -87,24 +87,30 @@ def allowed_image(filename, app):
     else:
         return False
 
-def scale_image(image, max_pixel_length):    
+def scale_image(image, pixel_length):    
     image = image.convert('RGB')
 
-    # Want to input an image that has max. pixel side length of 500
-    width_scale = int(image.width/max_pixel_length)
-    height_scale = int(image.height/max_pixel_length)
+    # Want to input an image that has max. pixel side length of pixel_length
+    width_scale = int(image.width/pixel_length)
+    height_scale = int(image.height/pixel_length)
 
-    print(width_scale)
-    print(height_scale)
     scale = width_scale if (width_scale>height_scale) else height_scale
+    # If scale is too small
     scale = 1 if scale==0 else scale
+    # If scale is too large
+    scale = image.width if scale >= image.width else scale
+    scale = image.height if  scale >= image.height else scale
 
-    print("Scale: ", scale)
     lr_img = image.resize((int(image.width / scale), int(image.height / scale)),
                            Image.BILINEAR)
-
-    print("LR Dimensions, W: ", lr_img.width, ", H: ", lr_img.height)
     return lr_img
+
+def remove_pixels(image, removalAmount, x_removal, y_removal):
+    x_centre = x_removal*image.width
+    y_centre = y_removal*image.height
+    ImageDraw.Draw(image).rectangle(((x_centre - 0.5*removalAmount, y_centre - 0.5*removalAmount), (x_centre + 0.5*removalAmount, y_centre + 0.5*removalAmount)), fill="black")
+    return image
+
 
 def app_configs(app):
     app.config["DEBUG"] = True
