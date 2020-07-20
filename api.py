@@ -48,6 +48,7 @@ def upload_image():
                     
                     # Removing Section from image
                     shorterSide = image.height if image.width > image.height else image.width
+                    # Limiting removal square to have width 50% of shortest side length of image
                     removalWidth = shorterSide * removalAmount * 0.01 * 0.5
 
                     image = remove_pixels(image, removalWidth, x_removal, y_removal) if removalWidth else image 
@@ -83,6 +84,11 @@ def display_results():
 @app.route('/past_results')
 def past_results():
     return render_template("past_results.html")
+
+    
+@app.route('/about_us')
+def about_us():
+    return render_template("about_us.html")
 
 if __name__ == '__main__':
     app.secret_key = 'many random bytes'

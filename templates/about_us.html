@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about_us.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">About Us</h1>
+        <p class="lead font-weight-normal">My name is <a class="website_link" href='http://www.shaynedlima.info'>Shayne D'Lima</a> and I am a
+            final year student at Monash University studying a B. Eng (Hons.)/ B. Commerce. For my Final Year Project, I have worked alongside 
+            Dr. Mehrtash Harandi to develop a web application that allows users to get a closer look into state-of-the-art research in the field of computer
+            vision and machine learning when it comes to enhancing images.
+        </p>
+        <p class="lead font-weight-normal">This web application focusses on the concept of Super Resolution in order to increase the resolution of images and 
+            consequentally improve the quality of images. Super Resolution involves the process of training a Neural Network to increase the resolution of images 
+            by inputting a lower resolution image into the network and training the network to output a higher resolution version of that image.
+        </p>
+
+        <a class="btn purple-button" href="{{ url_for('upload_image') }}">I'm keen to try it out!</a>
+    </div>
+</div>
+{% endblock %}
