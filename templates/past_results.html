@@ -1,102 +1,119 @@
 {% extends "layout.html" %}
-{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/pastResults.css') }}">{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pastResults.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cocoen.min.css') }}" />
+
+<script type="text/javascript" src="{{ url_for('static', filename='script/cocoen.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script/cocoen-jquery.min.js') }}"></script>
+
+{% endblock %}
 {% block title %}Past Results{% endblock %}
 
 {% block content %}
 
-<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
-    <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
-        {% for value1, value2 in past_results %}
-        <div class="img-comp-container">
-            <div class="img-comp-img">
-                <img src="{{config['BUCKET_LINK_PREV']}}{{value1}}" width="1350" height="900">
-            </div>
-            <div class="img-comp-img img-comp-overlay">
-                <img src="{{config['BUCKET_LINK_PREV']}}{{value2}}" width="1350" height="900">
-            </div>
-        </div>
-        {% endfor %}
+<!-- An explanation of what this page is showing -->
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">Previous Results</h1>
+        <p class="lead font-weight-normal">This page shows some of the results we have obtained when using this Super Resolution network on photos we have taken. 
+            Many of the original images used for this exercise inherently have a high resolution, in order to get a more clear view of the effects of the Super
+        Resolution process, please click on the image to expand it. </p>
     </div>
 </div>
 
+<!-- Display Results of Super Resolution on Images -->
+<div class="row">
+    {% for column in past_results|slice(3) %}
+        <div class="column">
+            {%- for value1, value2 in column %}
+                <div class="cocoen">
+                    <img class="slider-images" src="{{config['BUCKET_LINK_PREV']}}{{value1}}" id="{{value1}}">
+                    <img class="slider-images" src="{{config['BUCKET_LINK_PREV']}}{{value2}}" id="{{value2}}">
+                </div>
+            {%- endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Modal display of Image with slider -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <p class="modal-tag">Click to toggle between Low Resolution and Enhanced Image</p>
+        <img class="displayLR modal-content displayedImage" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="LR and SR Image" id="imgClickAndChange" onclick="changeImage(this)"  >
+    </div>
+</div>
+
+
+
 <script>
-    function initComparisons() {
-        var x, i;
-        /* Find all elements with an "overlay" class: */
-        x = document.getElementsByClassName("img-comp-overlay");
-        for (i = 0; i < x.length; i++) {
-            /* Once for each "overlay" element:
-            pass the "overlay" element as a parameter when executing the compareImages function: */
-            compareImages(x[i]);
+    var gcp_results_bucket = '{{config['BUCKET_LINK_PREV']}}';
+        
+    $(document).ready(function () {
+        // Instantiating Image Comparison Slider
+        $('.slider-images').on('click', function () {
+            $(".displayLR").css("border", "5px solid #ea1239");
+            var image = $(this).attr('src').split('/');
+            image = image[image.length - 1];
+            var base = image.substring(1, image.length);
+            var lr_img = gcp_results_bucket.concat('l'.concat(base));
+            $("#myModal").on("shown.bs.modal", function () { 
+                // Show a bigger version of the image with the onclick to change functionality
+                $(".displayLR").attr("src", lr_img);
+                
+            }).modal('show');
+        });
+        $('#myModal').on('hidden.bs.modal', function () {
+            $(".displayLR").attr("src", "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=");  
+        }); 
+    });
+
+    
+ 
+
+    document.querySelectorAll('.cocoen').forEach(function(element){
+        new Cocoen(element);
+    });
+
+
+    function changeImage(sender) {     
+        var base = sender.src.split('/')
+        base = base[base.length - 1];   
+        base = base.substring(1, base.length);
+
+        var sr_img = gcp_results_bucket.concat('s'.concat(base));
+        var lr_img = gcp_results_bucket.concat('l'.concat(base));
+        
+        if (document.getElementById(sender.id).src == lr_img) 
+        {
+            document.getElementById(sender.id).src = sr_img;
+            document.getElementById(sender.id).style.border = "5px solid #16af26";
         }
-        function compareImages(img) {
-            var slider, img, clicked = 0, w, h;
-            /* Get the width and height of the img element */
-            w = img.offsetWidth;
-            h = img.offsetHeight;
-            /* Set the width of the img element to 50%: */
-            img.style.width = (w / 2) + "px";
-            /* Create slider: */
-            slider = document.createElement("DIV");
-            slider.setAttribute("class", "img-comp-slider");
-            /* Insert slider */
-            img.parentElement.insertBefore(slider, img);
-            /* Position the slider in the middle: */
-            slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";
-            slider.style.left = (w / 2) - (slider.offsetWidth / 2) + "px";
-            /* Execute a function when the mouse button is pressed: */
-            slider.addEventListener("mousedown", slideReady);
-            /* And another function when the mouse button is released: */
-            window.addEventListener("mouseup", slideFinish);
-            /* Or touched (for touch screens: */
-            slider.addEventListener("touchstart", slideReady);
-            /* And released (for touch screens: */
-            window.addEventListener("touchstop", slideFinish);
-            function slideReady(e) {
-                /* Prevent any other actions that may occur when moving over the image: */
-                e.preventDefault();
-                /* The slider is now clicked and ready to move: */
-                clicked = 1;
-                /* Execute a function when the slider is moved: */
-                window.addEventListener("mousemove", slideMove);
-                window.addEventListener("touchmove", slideMove);
-            }
-            function slideFinish() {
-                /* The slider is no longer clicked: */
-                clicked = 0;
-            }
-            function slideMove(e) {
-                var pos;
-                /* If the slider is no longer clicked, exit this function: */
-                if (clicked == 0) return false;
-                /* Get the cursor's x position: */
-                pos = getCursorPos(e)
-                /* Prevent the slider from being positioned outside the image: */
-                if (pos < 0) pos = 0;
-                if (pos > w) pos = w;
-                /* Execute a function that will resize the overlay image according to the cursor: */
-                slide(pos);
-            }
-            function getCursorPos(e) {
-                var a, x = 0;
-                e = e || window.event;
-                /* Get the x positions of the image: */
-                a = img.getBoundingClientRect();
-                /* Calculate the cursor's x coordinate, relative to the image: */
-                x = e.pageX - a.left;
-                /* Consider any page scrolling: */
-                x = x - window.pageXOffset;
-                return x;
-            }
-            function slide(x) {
-                /* Resize the image: */
-                img.style.width = x + "px";
-                /* Position the slider: */
-                slider.style.left = img.offsetWidth - (slider.offsetWidth / 2) + "px";
-            }
+        else 
+        {
+            document.getElementById(sender.id).src = lr_img;
+            document.getElementById(sender.id).style.border = "5px solid #ea1239";
+        }
+
+        // Checking aspect ratio of image
+        // Calculate aspect ratio and store it in HTML data- attribute
+        var aspectRatio = document.getElementById(sender.id).width/document.getElementById(sender.id).height;
+        console.log('Aspect Ratio: ', aspectRatio);
+
+        // Conditional statement
+        if(aspectRatio > 1) {
+            // Image is landscape
+            document.getElementById(sender.id).style.width = "40%";
+            document.getElementById(sender.id).style.height = "auto";
+        } else if (aspectRatio < 1) {
+            // Image is portrait
+            document.getElementById(sender.id).style.maxWidth = "100%";
+        } else {
+            // Image is square
+            document.getElementById(sender.id).style.maxWidth = "100%";
+            document.getElementById(sender.id).style.height = "auto";      
         }
     }
 
-    initComparisons();
+
 </script>
 {% endblock %}
