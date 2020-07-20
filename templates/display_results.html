@@ -7,14 +7,25 @@
 {% block content %}
 
 <div class="flex-container">
-    <img class="displayLR displayedImage" src="{{config['BUCKET_LINK'] + lr_img}}" alt="LR Image">
-
-    <img class="displaySR displayedImage animated fadeIn delay-1s" src="{{config['BUCKET_LINK'] + sr_img}}"
-        alt="SR Image">
+    <img class="displayLR displayedImage" src="{{config['BUCKET_LINK'] + lr_img}}" alt="LR and SR Image" id="imgClickAndChange" onclick="changeImage()"  >
 </div>
 
 <script>
-    $(document).ready(function() {
+
+function changeImage() {
+    if (document.getElementById("imgClickAndChange").src == "{{config['BUCKET_LINK'] + lr_img}}") 
+    {
+        document.getElementById("imgClickAndChange").src = "{{config['BUCKET_LINK'] + sr_img}}";
+        document.getElementById("imgClickAndChange").style.borderColor = "#16af26";
+    }
+    else 
+    {
+        document.getElementById("imgClickAndChange").src = "{{config['BUCKET_LINK'] + lr_img}}";
+        document.getElementById("imgClickAndChange").style.borderColor = "#ea1239";
+    }
+}
+
+$(document).ready(function() {
     $("img").each(function() {
         // Calculate aspect ratio and store it in HTML data- attribute
         var aspectRatio = $(this).width()/$(this).height();
