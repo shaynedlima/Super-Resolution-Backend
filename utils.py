@@ -108,7 +108,7 @@ def scale_image(image, pixel_length):
 def remove_pixels(image, removalAmount, x_removal, y_removal):
     x_centre = x_removal*image.width
     y_centre = y_removal*image.height
-    ImageDraw.Draw(image).rectangle(((x_centre - 0.5*removalAmount, y_centre - 0.5*removalAmount), (x_centre + 0.5*removalAmount, y_centre + 0.5*removalAmount)), fill="black")
+    ImageDraw.Draw(image).rectangle(((x_centre - 0.5*removalAmount, y_centre - 0.5*removalAmount), (x_centre + 0.5*removalAmount, y_centre + 0.5*removalAmount)), fill="#ff33cc")
     return image
 
 

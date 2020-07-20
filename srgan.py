@@ -11,7 +11,7 @@ def forward_pass(lr_img, bucket_name, models, filename, halve=False):
     device = "cpu"
 
     # Saved Model
-    srgan_model = os.path.join(models, "srgan_22epochs.pt")
+    srgan_model = os.path.join(models, "srgan_sr_inpainting.pt")
     
     # Load models
     # srgan_generator = torch.load(srgan_model).to(device)
