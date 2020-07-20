@@ -6,13 +6,42 @@
 
 {% block content %}
 
+<div class="flex-container">
+    <img class="displayLR displayedImage" src="{{config['BUCKET_LINK'] + lr_img}}" alt="LR Image">
 
-<div class="d-md-flex flex-md-equal w-100">
-    <div class="displayLR">
-        <img class="displayedImage" src="{{config['BUCKET_LINK'] + lr_img}}" alt="LR Image" width="75%">
-    </div>
-    <div class="displaySR">
-        <img class="displayedImage animated fadeIn delay-1s" src="{{config['BUCKET_LINK'] + sr_img}}" alt="SR Image" width="75%">
-    </div>
+    <img class="displaySR displayedImage animated fadeIn delay-1s" src="{{config['BUCKET_LINK'] + sr_img}}"
+        alt="SR Image">
 </div>
+
+<script>
+    $(document).ready(function() {
+    $("img").each(function() {
+        // Calculate aspect ratio and store it in HTML data- attribute
+        var aspectRatio = $(this).width()/$(this).height();
+        $(this).data("aspect-ratio", aspectRatio);
+
+        console.log('Aspect Ratio: ', aspectRatio);
+        // Conditional statement
+        if(aspectRatio > 1) {
+            // Image is landscape
+            $(this).css({
+                width: "40%",
+                height: "auto"
+            });
+        } else if (aspectRatio < 1) {
+            // Image is portrait
+            $(this).css({
+                maxWidth: "100%"
+            });
+        } else {
+            // Image is square
+            $(this).css({
+                maxWidth: "100%",
+                height: "auto"
+            });            
+        }
+    });
+});
+</script>
+
 {% endblock %}
