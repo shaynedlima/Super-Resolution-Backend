@@ -91,5 +91,8 @@ def about_us():
     return render_template("about_us.html")
 
 if __name__ == '__main__':
-    app.secret_key = 'many random bytes'
+    # Local Testing
+    # app.secret_key = 'many random bytes'
+    # For Heroku
+    app.secret_key = os.environ['FLASH_SECRET_KEY']
     app.run(port=os.getenv('PORT', 5000))
