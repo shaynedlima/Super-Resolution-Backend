@@ -123,7 +123,8 @@
 @media screen and (max-width: 600px) {
   .column {
     flex: 100%;
-    max-width: 100%;
+    max-width: 93%;
+    margin: auto;
   }
 }
 
@@ -143,4 +144,17 @@
     max-height: 80vh;
     max-width: 80vh;
     object-fit: contain;
+}
+
+.mobile_images{
+  display: none;
+}
+
+@media (pointer:none), (pointer:coarse) {
+  .cocoen{
+    display: none;
+ }
+ .mobile_images{
+   display: block;
+ }
 }

@@ -7,7 +7,6 @@
   rel="stylesheet"
   href="{{ url_for('static', filename='css/cocoen.min.css') }}"
 />
-
 <script
   type="text/javascript"
   src="{{ url_for('static', filename='script/cocoen.min.js') }}"
@@ -30,6 +29,9 @@
       a more clear view of the effects of the Super Resolution process, please
       click on the image to expand it.
     </p>
+    <p class="modal-tag">
+      Click on an image to compare the image before and after the super resolution process.
+    </p>
   </div>
 </div>
 
@@ -40,16 +42,21 @@
     {%- for value1, value2 in column %}
     <div class="cocoen">
       <img
-        class="slider-images"
+        class="slider-images lr_img"
         src="{{config['BUCKET_LINK_PREV']}}{{value1}}"
         id="{{value1}}"
       />
       <img
-        class="slider-images"
+        class="slider-images sr_img"
         src="{{config['BUCKET_LINK_PREV']}}{{value2}}"
         id="{{value2}}"
       />
     </div>
+    <img
+        class="slider-images mobile_images"
+        src="{{config['BUCKET_LINK_PREV']}}{{value2}}"
+        id="{{value2}}"
+    />
     {%- endfor %}
   </div>
   {% endfor %}
@@ -59,7 +66,7 @@
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-dialog-centered">
     <p class="modal-tag">
-      Click to toggle between Low Resolution and Enhanced Image
+      Click to toggle between the Low Resolution and Enhanced Image
     </p>
     <div class="flex-container">
       <img
