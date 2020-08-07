@@ -94,5 +94,5 @@ if __name__ == '__main__':
     # Local Testing
     # app.secret_key = 'many random bytes'
     # For Heroku
-    app.secret_key = os.environ['FLASH_SECRET_KEY']
+    app.secret_key = os.environ.get('FLASH_SECRET_KEY')
     app.run(port=os.getenv('PORT', 5000))
