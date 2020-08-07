@@ -27,7 +27,7 @@ def upload_image():
                 if image.filename == "":
                     print("No filename")
                     flash("Looks like you forgot to upload an image.")
-                    return redirect(request.url)
+                    return render_template("upload_image.html")
 
                 if allowed_image(image.filename, app):
                     filename = secure_filename(image.filename)
@@ -62,7 +62,7 @@ def upload_image():
                 else:
                     print("That file extension is not allowed")
                     flash("Make sure you upload an image.")
-                    return redirect(request.url)
+                    return render_template("upload_image.html")
         return redirect(url_for('display_results', filename=filename))
                     
     return render_template("upload_image.html")
