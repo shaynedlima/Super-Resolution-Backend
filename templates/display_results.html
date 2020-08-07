@@ -1,58 +1,47 @@
-{% extends "layout.html" %}
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/displayResults.css') }}">
-{% endblock %}
-{% block title %}Results{% endblock %}
+{% extends "layout.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/displayResults.css') }}"
+/>
+{% endblock %} {% block title %}Results{% endblock %} {% block content %}
+<div class="text-center">
+  <h1 id="displayTitle" class="display-4 font-weight-normal">
+    Original Image
+  </h1>
+</div>
 
-{% block content %}
-
+<p class="instruction-tag">
+  Click to toggle between Low Resolution and Enhanced Image
+</p>
 <div class="flex-container">
-    <img class="displayLR displayedImage" src="{{config['BUCKET_LINK'] + lr_img}}" alt="LR and SR Image" id="imgClickAndChange" onclick="changeImage()"  >
+  <img
+    class="displayLR displayedImage"
+    src="{{config['BUCKET_LINK'] + lr_img}}"
+    alt="LR and SR Image"
+    id="imgClickAndChange"
+    onclick="changeImage()"
+  />
 </div>
 
 <script>
-
-function changeImage() {
-    if (document.getElementById("imgClickAndChange").src == "{{config['BUCKET_LINK'] + lr_img}}") 
-    {
-        document.getElementById("imgClickAndChange").src = "{{config['BUCKET_LINK'] + sr_img}}";
-        document.getElementById("imgClickAndChange").style.borderColor = "#16af26";
+  function changeImage() {
+    if (
+      document.getElementById("imgClickAndChange").src ==
+      "{{config['BUCKET_LINK'] + lr_img}}"
+    ) {
+      document.getElementById("displayTitle").innerHTML = "Enhanced Image";
+      document.getElementById("imgClickAndChange").src =
+        "{{config['BUCKET_LINK'] + sr_img}}";
+      document.getElementById("imgClickAndChange").style.borderColor =
+        "#16af26";
+    } else {
+      document.getElementById("displayTitle").innerHTML = "Original Image";
+      document.getElementById("imgClickAndChange").src =
+        "{{config['BUCKET_LINK'] + lr_img}}";
+      document.getElementById("imgClickAndChange").style.borderColor =
+        "#ea1239";
     }
-    else 
-    {
-        document.getElementById("imgClickAndChange").src = "{{config['BUCKET_LINK'] + lr_img}}";
-        document.getElementById("imgClickAndChange").style.borderColor = "#ea1239";
-    }
-}
-
-$(document).ready(function() {
-    $("img").each(function() {
-        // Calculate aspect ratio and store it in HTML data- attribute
-        var aspectRatio = $(this).width()/$(this).height();
-        $(this).data("aspect-ratio", aspectRatio);
-
-        console.log('Aspect Ratio: ', aspectRatio);
-        // Conditional statement
-        if(aspectRatio > 1) {
-            // Image is landscape
-            $(this).css({
-                width: "40%",
-                height: "auto"
-            });
-        } else if (aspectRatio < 1) {
-            // Image is portrait
-            $(this).css({
-                maxWidth: "100%"
-            });
-        } else {
-            // Image is square
-            $(this).css({
-                maxWidth: "100%",
-                height: "auto"
-            });            
-        }
-    });
-});
+  }
 </script>
 
 {% endblock %}

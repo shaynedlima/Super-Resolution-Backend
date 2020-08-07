@@ -1,119 +1,126 @@
-{% extends "layout.html" %}
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/pastResults.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/cocoen.min.css') }}" />
+{% extends "layout.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/pastResults.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/cocoen.min.css') }}"
+/>
 
-<script type="text/javascript" src="{{ url_for('static', filename='script/cocoen.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='script/cocoen-jquery.min.js') }}"></script>
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='script/cocoen.min.js') }}"
+></script>
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='script/cocoen-jquery.min.js') }}"
+></script>
 
-{% endblock %}
-{% block title %}Past Results{% endblock %}
-
-{% block content %}
+{% endblock %} {% block title %}Past Results{% endblock %} {% block content %}
 
 <!-- An explanation of what this page is showing -->
 <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
-    <div class="col-md-5 p-lg-5 mx-auto my-5">
-        <h1 class="display-4 font-weight-normal">Previous Results</h1>
-        <p class="lead font-weight-normal">This page shows some of the results we have obtained when using this Super Resolution network on photos we have taken. 
-            Many of the original images used for this exercise inherently have a high resolution, in order to get a more clear view of the effects of the Super
-        Resolution process, please click on the image to expand it. </p>
-    </div>
+  <div class="col-md-5 p-lg-5 mx-auto my-5">
+    <h1 class="display-4 font-weight-normal">Previous Results</h1>
+    <p class="lead font-weight-normal">
+      This page shows some of the results we have obtained when using this Super
+      Resolution network on photos we have taken. Many of the original images
+      used for this exercise inherently have a high resolution, in order to get
+      a more clear view of the effects of the Super Resolution process, please
+      click on the image to expand it.
+    </p>
+  </div>
 </div>
 
 <!-- Display Results of Super Resolution on Images -->
 <div class="row">
-    {% for column in past_results|slice(3) %}
-        <div class="column">
-            {%- for value1, value2 in column %}
-                <div class="cocoen">
-                    <img class="slider-images" src="{{config['BUCKET_LINK_PREV']}}{{value1}}" id="{{value1}}">
-                    <img class="slider-images" src="{{config['BUCKET_LINK_PREV']}}{{value2}}" id="{{value2}}">
-                </div>
-            {%- endfor %}
-        </div>
-    {% endfor %}
+  {% for column in past_results|slice(3) %}
+  <div class="column">
+    {%- for value1, value2 in column %}
+    <div class="cocoen">
+      <img
+        class="slider-images"
+        src="{{config['BUCKET_LINK_PREV']}}{{value1}}"
+        id="{{value1}}"
+      />
+      <img
+        class="slider-images"
+        src="{{config['BUCKET_LINK_PREV']}}{{value2}}"
+        id="{{value2}}"
+      />
+    </div>
+    {%- endfor %}
+  </div>
+  {% endfor %}
 </div>
 
 <!-- Modal display of Image with slider -->
 <div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-        <p class="modal-tag">Click to toggle between Low Resolution and Enhanced Image</p>
-        <img class="displayLR modal-content displayedImage" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="LR and SR Image" id="imgClickAndChange" onclick="changeImage(this)"  >
+  <div class="modal-dialog modal-dialog-centered">
+    <p class="modal-tag">
+      Click to toggle between Low Resolution and Enhanced Image
+    </p>
+    <div class="flex-container">
+      <img
+        class="displayLR modal-content displayedImage"
+        src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="
+        alt="LR and SR Image"
+        id="imgClickAndChange"
+        onclick="changeImage(this)"
+      />
     </div>
+  </div>
 </div>
 
-
-
 <script>
-    var gcp_results_bucket = '{{config['BUCKET_LINK_PREV']}}';
-        
-    $(document).ready(function () {
-        // Instantiating Image Comparison Slider
-        $('.slider-images').on('click', function () {
-            $(".displayLR").css("border", "5px solid #ea1239");
-            var image = $(this).attr('src').split('/');
-            image = image[image.length - 1];
-            var base = image.substring(1, image.length);
-            var lr_img = gcp_results_bucket.concat('l'.concat(base));
-            $("#myModal").on("shown.bs.modal", function () { 
-                // Show a bigger version of the image with the onclick to change functionality
-                $(".displayLR").attr("src", lr_img);
-                
-            }).modal('show');
-        });
-        $('#myModal').on('hidden.bs.modal', function () {
-            $(".displayLR").attr("src", "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=");  
-        }); 
-    });
+  var gcp_results_bucket = '{{config['BUCKET_LINK_PREV']}}';
 
-    
- 
+  $(document).ready(function () {
+      // Instantiating Image Comparison Slider
+      $('.slider-images').on('click', function () {
+          $(".displayLR").css("border", "5px solid #ea1239");
+          var image = $(this).attr('src').split('/');
+          image = image[image.length - 1];
+          var base = image.substring(1, image.length);
+          var lr_img = gcp_results_bucket.concat('l'.concat(base));
+          $("#myModal").on("shown.bs.modal", function () {
+              // Show a bigger version of the image with the onclick to change functionality
+              $(".displayLR").attr("src", lr_img);
 
-    document.querySelectorAll('.cocoen').forEach(function(element){
-        new Cocoen(element);
-    });
+          }).modal('show');
+      });
+      $('#myModal').on('hidden.bs.modal', function () {
+          $(".displayLR").attr("src", "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=");
+      });
+  });
 
 
-    function changeImage(sender) {     
-        var base = sender.src.split('/')
-        base = base[base.length - 1];   
-        base = base.substring(1, base.length);
-
-        var sr_img = gcp_results_bucket.concat('s'.concat(base));
-        var lr_img = gcp_results_bucket.concat('l'.concat(base));
-        
-        if (document.getElementById(sender.id).src == lr_img) 
-        {
-            document.getElementById(sender.id).src = sr_img;
-            document.getElementById(sender.id).style.border = "5px solid #16af26";
-        }
-        else 
-        {
-            document.getElementById(sender.id).src = lr_img;
-            document.getElementById(sender.id).style.border = "5px solid #ea1239";
-        }
-
-        // Checking aspect ratio of image
-        // Calculate aspect ratio and store it in HTML data- attribute
-        var aspectRatio = document.getElementById(sender.id).width/document.getElementById(sender.id).height;
-        console.log('Aspect Ratio: ', aspectRatio);
-
-        // Conditional statement
-        if(aspectRatio > 1) {
-            // Image is landscape
-            document.getElementById(sender.id).style.width = "40%";
-            document.getElementById(sender.id).style.height = "auto";
-        } else if (aspectRatio < 1) {
-            // Image is portrait
-            document.getElementById(sender.id).style.maxWidth = "100%";
-        } else {
-            // Image is square
-            document.getElementById(sender.id).style.maxWidth = "100%";
-            document.getElementById(sender.id).style.height = "auto";      
-        }
-    }
 
 
+  document.querySelectorAll('.cocoen').forEach(function(element){
+      new Cocoen(element);
+  });
+
+
+  function changeImage(sender) {
+      var base = sender.src.split('/')
+      base = base[base.length - 1];
+      base = base.substring(1, base.length);
+
+      var sr_img = gcp_results_bucket.concat('s'.concat(base));
+      var lr_img = gcp_results_bucket.concat('l'.concat(base));
+
+      if (document.getElementById("imgClickAndChange").src == lr_img)
+      {
+          document.getElementById("imgClickAndChange").src = sr_img;
+          document.getElementById("imgClickAndChange").style.border = "5px solid #16af26";
+      }
+      else
+      {
+          document.getElementById("imgClickAndChange").src = lr_img;
+          document.getElementById("imgClickAndChange").style.border = "5px solid #ea1239";
+      }
+  }
 </script>
 {% endblock %}

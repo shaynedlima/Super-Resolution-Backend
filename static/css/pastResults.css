@@ -41,9 +41,9 @@
 }
 
 .modal-dialog {
-  max-width: 90% !important;
   display: flex;
   flex-direction: column;
+  max-width: 100% !important;
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
@@ -95,8 +95,8 @@
 }
 
 .modal-tag{
+  text-align: center;
   color: #BB86FC;
-  flex-grow: 1;
 }
 
 .displayLR {
@@ -125,4 +125,22 @@
     flex: 100%;
     max-width: 100%;
   }
+}
+
+.flex-container {
+  height: 90%;
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  position: relative;
+  text-align: center;
+}
+
+.flex-container img {
+    height: 80%;
+    width: 80%;
+    max-height: 80vh;
+    max-width: 80vh;
+    object-fit: contain;
 }
