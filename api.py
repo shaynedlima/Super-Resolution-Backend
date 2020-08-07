@@ -8,6 +8,11 @@ from PIL import Image
 app = flask.Flask(__name__)
 app = app_configs(app)
 
+# Local Testing
+# app.secret_key = 'many random bytes'
+# For Heroku
+app.secret_key = os.environ.get('FLASH_SECRET_KEY')
+
 # Heroku GCP Setup
 f = open("./google-credentials-heroku.json", "w")
 f.write(os.environ['GOOGLE_CONFIG'])
@@ -91,8 +96,4 @@ def about_us():
     return render_template("about_us.html")
 
 if __name__ == '__main__':
-    # Local Testing
-    # app.secret_key = 'many random bytes'
-    # For Heroku
-    app.secret_key = os.environ.get('FLASH_SECRET_KEY')
     app.run(port=os.getenv('PORT', 5000))
