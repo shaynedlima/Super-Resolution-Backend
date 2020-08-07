@@ -29,6 +29,11 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
     />
 
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
     <!-- jQuery -->
     <script
       src="https://code.jquery.com/jquery-3.4.1.js"
@@ -50,7 +55,18 @@
   </head>
 
   <body class="body">
-    <nav class="site-header sticky-top py-1">
+    <div class="topnav" id="myTopnav">
+      <a href="{{ url_for('home') }}" class="active">Super Resolution</a>
+      <a href="{{ url_for('upload_image') }}">Upload Image</a>
+      <a href="{{ url_for('display_results') }}">Display Results</a>
+      <a href="{{ url_for('about_us') }}">About Us</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+      </a>
+    </div>
+
+    <!--     
+    <nav class="navbar site-header sticky-top">
       <div
         class="container d-flex flex-column flex-md-row justify-content-between"
       >
@@ -70,10 +86,20 @@
           >About Us</a
         >
       </div>
-    </nav>
+    </nav> -->
 
     {% block content %}{% endblock %}
-
+    <script>
+      /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+      function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+          x.className += " responsive";
+        } else {
+          x.className = "topnav";
+        }
+      }
+    </script>
     <footer class="container py-5"></footer>
   </body>
 </html>
