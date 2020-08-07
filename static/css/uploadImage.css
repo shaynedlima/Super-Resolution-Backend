@@ -38,6 +38,10 @@ div#loading {
   margin: auto;
 }
 
+.choose-file{
+  width: 40vh !important;
+}
+
 .choose-file input {
   position: absolute;
   font-size: 50px;

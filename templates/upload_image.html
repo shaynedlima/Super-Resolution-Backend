@@ -20,7 +20,6 @@
 
 
 <div id="form" class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
-  <div class="col-md-5 p-lg-5 mx-auto my-5">
     <h1 class="display-4 font-weight-normal">Upload Image</h1>
 
     <!-- Uploaded image area-->
@@ -58,7 +57,7 @@
 
           <div class="privacyTerms">
             <input class="form-check-input" type="checkbox" value="" id="privacyCheck" name="privacyCheck"
-              onchange="agreeTerms();">
+              onchange="agreeTerms();" autocomplete="off">
             <label class="form-check-label" for="privacyCheck">
               I agree to the <a class="terms-conditions" data-toggle="modal" data-target="#termsModal">privacy
                 policy</a>
@@ -82,7 +81,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <p>No registration is required to use this application, thus we do not collect any personally
+                  <p>No registration is required to use this application, as a result we do not collect any personally
                     identifiable data.</p>
                   <p>When images are uploaded, these images will be made publicly accessible for 1 day before being
                     deleted from our servers.</p>
@@ -104,7 +103,6 @@
 
     </form>
 
-  </div>
 </div>
 
 
@@ -172,10 +170,6 @@
   function openModal() {
     $('#termsModal').modal('show');
   }
-
-
-
-
 
   // Initialising Canvas
   var image = document.getElementById('imageResult');
@@ -254,7 +248,7 @@
     document.getElementById('x_removal').value = x / canvas.width;
     document.getElementById('y_removal').value = y / canvas.height;
 
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#ff33cc";
     ctx.fillRect(x - removalWidth / 2, y - removalWidth / 2, removalWidth, removalWidth);
   };
 
@@ -270,7 +264,7 @@
       x = 0, y = 0;
     }
 
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#ff33cc";
     ctx.fillRect(x - removalWidth / 2, y - removalWidth / 2, removalWidth, removalWidth);
   }
 
