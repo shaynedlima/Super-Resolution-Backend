@@ -1,25 +1,65 @@
-{% extends "layout.html" %}
-{% block title %}{% endblock %}
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/about_us.css') }}">
-{% endblock %}
-
-{% block content %}
+{% extends "layout.html" %} {% block title %}{% endblock %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/about_us.css') }}"
+/>
+{% endblock %} {% block content %}
 
 <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
-    <div class="col-md-5 p-lg-5 mx-auto my-5">
-        <h1 class="display-4 font-weight-normal">About Us</h1>
-        <p class="lead font-weight-normal">My name is <a class="website_link" href='http://www.shaynedlima.info'>Shayne D'Lima</a> and I am a
-            final year student at Monash University studying a B. Eng (Hons.)/ B. Commerce. For my Final Year Project, I have worked alongside 
-            Dr. Mehrtash Harandi to develop a web application that allows users to get a closer look into state-of-the-art research in the field of computer
-            vision and machine learning when it comes to enhancing images.
-        </p>
-        <p class="lead font-weight-normal">This web application focusses on the concept of Super Resolution in order to increase the resolution of images and 
-            consequentally improve the quality of images. Super Resolution involves the process of training a Neural Network to increase the resolution of images 
-            by inputting a lower resolution image into the network and training the network to output a higher resolution version of that image.
-        </p>
+  <div class="col-md-5 p-lg-5 mx-auto my-5">
+    <h1 class="display-4 font-weight-normal">About Us</h1>
+    <p class="lead font-weight-normal">
+      My name is
+      <a class="website_link" href="http://www.shaynedlima.info" target="_blank"
+        >Shayne D'Lima</a
+      >
+      and I am a final year student at Monash University studying a B. Eng
+      (Hons.)/ B. Commerce. For my Final Year Project, I have been working
+      alongside Dr. Mehrtash Harandi to develop a web application that allows
+      users to get a closer look into state-of-the-art research in the field of
+      computer vision and machine learning when it comes to enhancing images.
+    </p>
+    <p class="lead font-weight-normal">
+      This web application focusses on the concept of Super Resolution. Super
+      Resolution involves the process of training a Neural Network to increase
+      the resolution of images by inputting a lower resolution image into the
+      network and training the network to output a higher resolution version of
+      that image.
+    </p>
 
-        <a class="btn purple-button" href="{{ url_for('upload_image') }}">I'm keen to try it out!</a>
+    <a class="btn purple-button" href="{{ url_for('upload_image') }}"
+      >I'm keen to try it out!</a
+    >
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <p class="lead font-weight-normal">
+          The main source of inspiration for this project came from
+          <a href="https://arxiv.org/pdf/1609.04802.pdf" class="website_link" target="_blank">"Photo-Realistic Single Image Super-Resolution Using a Generative
+          Adversarial Network"</a> (Ledig et al., 2017). </br></br>This paper investigates the
+          use of Generative Adversarial Networks (GANs) to increase the
+          resolution of images, with impressive results.  </br> </br>A GAN is a machine learning framework in which
+          two opposing networks, the generator and the discriminator, are
+          trained simultaneously. The generator is trained to generate data that
+          is similar to the data that is fed into it. On the other hand, the
+          discriminator is tasked with determining whether the data it receives
+          is from the actual training set or if it is from the generator.
+        </p>
+      </div>
+      <div class="col-sm">
+        <p class="lead font-weight-normal">
+          An implementation of this research paper was made publicly available on Github by 
+          <a href="https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Super-Resolution" class="website_link" target="_blank">sgrvinod</a>. 
+          This served as an amazing starting point for this application; adapting and 
+          building on this code allowed me to train this network on various datasets 
+          and explore other ML concepts such as image inpainting.
+        </br></br>
+
+        </p>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
