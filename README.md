@@ -7,4 +7,4 @@ This web application focusses on the concept of Super Resolution. Super Resoluti
 
 The main source of inspiration for this project came from ["Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network"](https://arxiv.org/pdf/1609.04802.pdf) (Ledig et al., 2017). This paper investigates the use of Generative Adversarial Networks (GANs) to increase the resolution of images, with impressive results.
 
-An implementation of this research paper was made publicly available on Github by [sgrvinod] (https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Super-Resolution). This served as a great starting point for this application; adapting and building on this code allowed me to train this network on various datasets and explore other ML concepts such as image inpainting.
+An implementation of this research paper was made publicly available on Github by [sgrvinod](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Super-Resolution). This served as a great starting point for this application; adapting and building on this code allowed me to train this network on various datasets and explore other ML concepts such as image inpainting.
