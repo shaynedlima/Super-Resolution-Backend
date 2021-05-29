@@ -1,5 +1,5 @@
 # Super Resolution Web Application
-### [Demo](http://super-res.herokuapp.com/)
+<!-- ### [Demo](http://super-res.herokuapp.com/) -->
 
 For my Engineering Final Year Project, I worked alongside Dr. Mehrtash Harandi to develop a web application that allows users to get a closer look into state-of-the-art research in the field of computer vision and machine learning when it comes to enhancing images.
 
