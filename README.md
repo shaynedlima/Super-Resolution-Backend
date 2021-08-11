@@ -35,6 +35,12 @@ We also looked into how we could use these techniques to enhance the quality of 
 
 ![Video super resolution](/assets/video_super_res.png?raw=true "Title")
 
+
+
+https://user-images.githubusercontent.com/21117482/129003578-b9427136-36a8-48b6-b280-5843f9d2f393.mp4
+
+
+
 ## Further Work
 - Mobile App with on-device inference
 - Improve video enhancement by making use of the information between frames, rather than viewing frames individually
